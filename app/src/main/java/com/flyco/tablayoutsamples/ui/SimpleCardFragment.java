@@ -21,11 +21,6 @@ public class SimpleCardFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fr_simple_card, null);
         TextView card_title_tv = (TextView) v.findViewById(R.id.card_title_tv);

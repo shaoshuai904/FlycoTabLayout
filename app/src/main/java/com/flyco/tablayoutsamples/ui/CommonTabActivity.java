@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -22,7 +23,7 @@ import com.flyco.tablayoutsamples.utils.ViewFindUtils;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CommonTabActivity extends AppCompatActivity {
+public class CommonTabActivity extends FragmentActivity {
     private Context mContext = this;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private ArrayList<Fragment> mFragments2 = new ArrayList<>();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,13 +20,10 @@ import com.flyco.tablayoutsamples.utils.ViewFindUtils;
 
 import java.util.ArrayList;
 
-public class SlidingTabActivity extends AppCompatActivity implements OnTabSelectListener {
+public class SlidingTabActivity extends FragmentActivity implements OnTabSelectListener {
     private Context mContext = this;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private final String[] mTitles = {
-            "热门", "iOS", "Android"
-            , "前端", "后端", "设计", "工具资源"
-    };
+    private final String[] mTitles = {"热门", "iOS", "Android", "前端", "后端", "设计", "工具资源"};
     private MyPagerAdapter mAdapter;
 
     @Override

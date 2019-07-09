@@ -19,7 +19,7 @@ object UnreadMsgUtils {
         val dm = msgView.resources.displayMetrics
         msgView.visibility = View.VISIBLE
         if (num <= 0) {//圆点,设置默认宽高
-            msgView.strokeWidth = 0
+            msgView.setStrokeWidth(0)
             msgView.text = ""
 
             lp.width = (5 * dm.density).toInt()

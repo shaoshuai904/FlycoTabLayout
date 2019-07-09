@@ -3,10 +3,10 @@ package com.flyco.tablayoutsamples.ui;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.flyco.tablayout.SegmentTabLayout;
@@ -17,7 +17,7 @@ import com.flyco.tablayoutsamples.utils.ViewFindUtils;
 
 import java.util.ArrayList;
 
-public class SegmentTabActivity extends AppCompatActivity {
+public class SegmentTabActivity extends FragmentActivity {
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private ArrayList<Fragment> mFragments2 = new ArrayList<>();
 
