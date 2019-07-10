@@ -42,6 +42,21 @@ class SegmentTabActivity : FragmentActivity() {
             showDot(2)
         }
 
+        tl_3.apply {
+            setTabData(mTitles3)
+            setOnTabSelectListener(object : OnTabSelectListener {
+                override fun onTabSelect(position: Int) {
+                    vp_2.currentItem = position
+                }
+
+                override fun onTabReselect(position: Int) {}
+            })
+            showDot(1)
+            showDot(2)
+            val msgView2 = getMsgView(2)
+            msgView2?.setBackgroundColor(Color.parseColor("#6D8FB0"))
+        }
+
         vp_2.apply {
             adapter = MyPagerAdapter(supportFragmentManager)
             addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -60,20 +75,6 @@ class SegmentTabActivity : FragmentActivity() {
             currentItem = 1
         }
 
-        tl_3.apply {
-            setTabData(mTitles3)
-            setOnTabSelectListener(object : OnTabSelectListener {
-                override fun onTabSelect(position: Int) {
-                    vp_2.currentItem = position
-                }
-
-                override fun onTabReselect(position: Int) {}
-            })
-            showDot(1)
-            showDot(2)
-            val msgView2 = getMsgView(2)
-            msgView2?.setBackgroundColor(Color.parseColor("#6D8FB0"))
-        }
 
         tl_4.apply {
             setTabData(mTitles2, this@SegmentTabActivity, R.id.fl_change, mFragments2)
@@ -81,7 +82,6 @@ class SegmentTabActivity : FragmentActivity() {
         }
 
         tl_5.setTabData(mTitles3)
-
     }
 
 
