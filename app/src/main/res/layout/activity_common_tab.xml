@@ -46,7 +46,7 @@
         <FrameLayout
             android:id="@+id/fl_change"
             android:layout_width="match_parent"
-            android:layout_height="84dp"></FrameLayout>
+            android:layout_height="84dp" />
 
         <com.flyco.tablayout.CommonTabLayout
             android:id="@+id/tl_3"
