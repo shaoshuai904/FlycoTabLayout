@@ -45,32 +45,47 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     private int mLastTab;
     private int mTabCount;
     // 用于绘制显示器
-    private Rect mIndicatorRect = new Rect();
-    private GradientDrawable mIndicatorDrawable = new GradientDrawable();
     private GradientDrawable mRectDrawable = new GradientDrawable();
 
-    private Paint mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private int mBarColor;
+    private int mBarStrokeColor;
+    private float mBarStrokeWidth;
 
     private float mTabPadding;
     private boolean mTabSpaceEqual;
     private float mTabWidth;
 
-    // indicator
-    private int mIndicatorColor;
-    private float mIndicatorHeight;
-    private float mIndicatorCornerRadius;
-    private float mIndicatorMarginLeft;
-    private float mIndicatorMarginTop;
-    private float mIndicatorMarginRight;
-    private float mIndicatorMarginBottom;
-    private long mIndicatorAnimDuration;
-    private boolean mIndicatorAnimEnable;
-    private boolean mIndicatorBounceEnable;
+    private int mHeight;
+
+    // indicator 指示器
+    private Indicator mIndicator = new Indicator();
+
+    public class Indicator {
+        int color;
+        float height;
+        float cornerRadius;
+        float marginLeft;
+        float marginTop;
+        float marginRight;
+        float marginBottom;
+        long animDuration;
+        boolean animEnable;
+        boolean bounceEnable;
+
+        Rect rect = new Rect();
+        GradientDrawable drawable = new GradientDrawable();
+    }
 
     // divider
-    private int mDividerColor;
-    private float mDividerWidth;
-    private float mDividerPadding;
+    private Divider mDivider = new Divider();
+
+    public class Divider {
+        int color;
+        float width;
+        float padding;
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    }
 
     // title
     private static final int TEXT_BOLD_NONE = 0;
@@ -82,11 +97,6 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     private int mTextBold;
     private boolean mTextAllCaps;
 
-    private int mBarColor;
-    private int mBarStrokeColor;
-    private float mBarStrokeWidth;
-
-    private int mHeight;
 
     // anim
     private ValueAnimator mValueAnimator;
@@ -135,24 +145,24 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     private void obtainAttributes(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SegmentTabLayout);
 
-        mIndicatorColor = ta.getColor(R.styleable.SegmentTabLayout_tl_indicator_color, Color.parseColor("#222831"));
-        mIndicatorHeight = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_height, -1);
-        mIndicatorCornerRadius = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_corner_radius, -1);
-        mIndicatorMarginLeft = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_margin_left, dp2px(0));
-        mIndicatorMarginTop = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_margin_top, 0);
-        mIndicatorMarginRight = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_margin_right, dp2px(0));
-        mIndicatorMarginBottom = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_margin_bottom, 0);
-        mIndicatorAnimEnable = ta.getBoolean(R.styleable.SegmentTabLayout_tl_indicator_anim_enable, false);
-        mIndicatorBounceEnable = ta.getBoolean(R.styleable.SegmentTabLayout_tl_indicator_bounce_enable, true);
-        mIndicatorAnimDuration = ta.getInt(R.styleable.SegmentTabLayout_tl_indicator_anim_duration, -1);
+        mIndicator.color = ta.getColor(R.styleable.SegmentTabLayout_tl_indicator_color, Color.parseColor("#222831"));
+        mIndicator.height = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_height, -1);
+        mIndicator.cornerRadius = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_corner_radius, -1);
+        mIndicator.marginLeft = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_margin_left, dp2px(0));
+        mIndicator.marginTop = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_margin_top, 0);
+        mIndicator.marginRight = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_margin_right, dp2px(0));
+        mIndicator.marginBottom = ta.getDimension(R.styleable.SegmentTabLayout_tl_indicator_margin_bottom, 0);
+        mIndicator.animEnable = ta.getBoolean(R.styleable.SegmentTabLayout_tl_indicator_anim_enable, false);
+        mIndicator.bounceEnable = ta.getBoolean(R.styleable.SegmentTabLayout_tl_indicator_bounce_enable, true);
+        mIndicator.animDuration = ta.getInt(R.styleable.SegmentTabLayout_tl_indicator_anim_duration, -1);
 
-        mDividerColor = ta.getColor(R.styleable.SegmentTabLayout_tl_divider_color, mIndicatorColor);
-        mDividerWidth = ta.getDimension(R.styleable.SegmentTabLayout_tl_divider_width, dp2px(1));
-        mDividerPadding = ta.getDimension(R.styleable.SegmentTabLayout_tl_divider_padding, 0);
+        mDivider.color = ta.getColor(R.styleable.SegmentTabLayout_tl_divider_color, mIndicator.color);
+        mDivider.width = ta.getDimension(R.styleable.SegmentTabLayout_tl_divider_width, dp2px(1));
+        mDivider.padding = ta.getDimension(R.styleable.SegmentTabLayout_tl_divider_padding, 0);
 
         mTextsize = ta.getDimension(R.styleable.SegmentTabLayout_tl_textsize, sp2px(13f));
         mTextSelectColor = ta.getColor(R.styleable.SegmentTabLayout_tl_textSelectColor, Color.parseColor("#ffffff"));
-        mTextUnselectColor = ta.getColor(R.styleable.SegmentTabLayout_tl_textUnselectColor, mIndicatorColor);
+        mTextUnselectColor = ta.getColor(R.styleable.SegmentTabLayout_tl_textUnselectColor, mIndicator.color);
         mTextBold = ta.getInt(R.styleable.SegmentTabLayout_tl_textBold, TEXT_BOLD_NONE);
         mTextAllCaps = ta.getBoolean(R.styleable.SegmentTabLayout_tl_textAllCaps, false);
 
@@ -161,7 +171,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         mTabPadding = ta.getDimension(R.styleable.SegmentTabLayout_tl_tab_padding, mTabSpaceEqual || mTabWidth > 0 ? dp2px(0) : dp2px(10));
 
         mBarColor = ta.getColor(R.styleable.SegmentTabLayout_tl_bar_color, Color.TRANSPARENT);
-        mBarStrokeColor = ta.getColor(R.styleable.SegmentTabLayout_tl_bar_stroke_color, mIndicatorColor);
+        mBarStrokeColor = ta.getColor(R.styleable.SegmentTabLayout_tl_bar_stroke_color, mIndicator.color);
         mBarStrokeWidth = ta.getDimension(R.styleable.SegmentTabLayout_tl_bar_stroke_width, dp2px(1));
 
         ta.recycle();
@@ -280,76 +290,56 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
             invalidate();
         } else {
             mValueAnimator.setObjectValues(mLastP, mCurrentP);
-            if (mIndicatorBounceEnable) {
+            if (mIndicator.bounceEnable) {
                 mValueAnimator.setInterpolator(mInterpolator);
             }
 
-            if (mIndicatorAnimDuration < 0) {
-                mIndicatorAnimDuration = mIndicatorBounceEnable ? 500 : 250;
+            if (mIndicator.animDuration < 0) {
+                mIndicator.animDuration = mIndicator.bounceEnable ? 500 : 250;
             }
-            mValueAnimator.setDuration(mIndicatorAnimDuration);
+            mValueAnimator.setDuration(mIndicator.animDuration);
             mValueAnimator.start();
         }
     }
 
     private void calcIndicatorRect() {
         View currentTabView = mTabsContainer.getChildAt(this.mCurrentTab);
-        float left = currentTabView.getLeft();
-        float right = currentTabView.getRight();
 
-        mIndicatorRect.left = (int) left;
-        mIndicatorRect.right = (int) right;
+        mIndicator.rect.left = currentTabView.getLeft();
+        mIndicator.rect.right = currentTabView.getRight();
 
-        if (!mIndicatorAnimEnable) {
+        if (!mIndicator.animEnable) {
             if (mCurrentTab == 0) {
-                /**The corners are ordered top-left, top-right, bottom-right, bottom-left*/
-                mRadiusArr[0] = mIndicatorCornerRadius;
-                mRadiusArr[1] = mIndicatorCornerRadius;
-                mRadiusArr[2] = 0;
-                mRadiusArr[3] = 0;
-                mRadiusArr[4] = 0;
-                mRadiusArr[5] = 0;
-                mRadiusArr[6] = mIndicatorCornerRadius;
-                mRadiusArr[7] = mIndicatorCornerRadius;
+                setRadius(mIndicator.cornerRadius, 0);
             } else if (mCurrentTab == mTabCount - 1) {
-                /**The corners are ordered top-left, top-right, bottom-right, bottom-left*/
-                mRadiusArr[0] = 0;
-                mRadiusArr[1] = 0;
-                mRadiusArr[2] = mIndicatorCornerRadius;
-                mRadiusArr[3] = mIndicatorCornerRadius;
-                mRadiusArr[4] = mIndicatorCornerRadius;
-                mRadiusArr[5] = mIndicatorCornerRadius;
-                mRadiusArr[6] = 0;
-                mRadiusArr[7] = 0;
+                setRadius(0, mIndicator.cornerRadius);
             } else {
-                /**The corners are ordered top-left, top-right, bottom-right, bottom-left*/
-                mRadiusArr[0] = 0;
-                mRadiusArr[1] = 0;
-                mRadiusArr[2] = 0;
-                mRadiusArr[3] = 0;
-                mRadiusArr[4] = 0;
-                mRadiusArr[5] = 0;
-                mRadiusArr[6] = 0;
-                mRadiusArr[7] = 0;
+                setRadius(0, 0);
             }
         } else {
-            /**The corners are ordered top-left, top-right, bottom-right, bottom-left*/
-            mRadiusArr[0] = mIndicatorCornerRadius;
-            mRadiusArr[1] = mIndicatorCornerRadius;
-            mRadiusArr[2] = mIndicatorCornerRadius;
-            mRadiusArr[3] = mIndicatorCornerRadius;
-            mRadiusArr[4] = mIndicatorCornerRadius;
-            mRadiusArr[5] = mIndicatorCornerRadius;
-            mRadiusArr[6] = mIndicatorCornerRadius;
-            mRadiusArr[7] = mIndicatorCornerRadius;
+            setRadius(mIndicator.cornerRadius, mIndicator.cornerRadius);
         }
+    }
+
+    /**
+     * The corners are ordered top-left, top-right, bottom-right, bottom-left
+     */
+    private void setRadius(float leftRadius, float rightRadius) {
+        mRadiusArr[0] = leftRadius;
+        mRadiusArr[1] = leftRadius;
+        mRadiusArr[2] = rightRadius;
+        mRadiusArr[3] = rightRadius;
+        mRadiusArr[4] = rightRadius;
+        mRadiusArr[5] = rightRadius;
+        mRadiusArr[6] = leftRadius;
+        mRadiusArr[7] = leftRadius;
     }
 
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
         IndicatorPoint p = (IndicatorPoint) animation.getAnimatedValue();
-        mIndicatorRect.left = (int) p.left;
-        mIndicatorRect.right = (int) p.right;
+        mIndicator.rect.left = (int) p.left;
+        mIndicator.rect.right = (int) p.right;
         invalidate();
     }
 
@@ -366,34 +356,36 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         int height = getHeight();
         int paddingLeft = getPaddingLeft();
 
-        if (mIndicatorHeight < 0) {
-            mIndicatorHeight = height - mIndicatorMarginTop - mIndicatorMarginBottom;
+        if (mIndicator.height < 0) {
+            mIndicator.height = height - mIndicator.marginTop - mIndicator.marginBottom;
         }
 
-        if (mIndicatorCornerRadius < 0 || mIndicatorCornerRadius > mIndicatorHeight / 2) {
-            mIndicatorCornerRadius = mIndicatorHeight / 2;
+        if (mIndicator.cornerRadius < 0 || mIndicator.cornerRadius > mIndicator.height / 2) {
+            mIndicator.cornerRadius = mIndicator.height / 2;
         }
 
-        //draw rect
+        //draw rect 填充色
         mRectDrawable.setColor(mBarColor);
         mRectDrawable.setStroke((int) mBarStrokeWidth, mBarStrokeColor);
-        mRectDrawable.setCornerRadius(mIndicatorCornerRadius);
+        mRectDrawable.setCornerRadius(mIndicator.cornerRadius);
         mRectDrawable.setBounds(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
         mRectDrawable.draw(canvas);
 
-        // draw divider
-        if (!mIndicatorAnimEnable && mDividerWidth > 0) {
-            mDividerPaint.setStrokeWidth(mDividerWidth);
-            mDividerPaint.setColor(mDividerColor);
+        // draw divider 分割线
+        if (!mIndicator.animEnable && mDivider.width > 0) {
+            mDivider.paint.setStrokeWidth(mDivider.width);
+            mDivider.paint.setColor(mDivider.color);
             for (int i = 0; i < mTabCount - 1; i++) {
                 View tab = mTabsContainer.getChildAt(i);
-                canvas.drawLine(paddingLeft + tab.getRight(), mDividerPadding, paddingLeft + tab.getRight(), height - mDividerPadding, mDividerPaint);
+                canvas.drawLine(paddingLeft + tab.getRight(), mDivider.padding,
+                        paddingLeft + tab.getRight(), height - mDivider.padding,
+                        mDivider.paint);
             }
         }
 
 
         //draw indicator line
-        if (mIndicatorAnimEnable) {
+        if (mIndicator.animEnable) {
             if (mIsFirstDraw) {
                 mIsFirstDraw = false;
                 calcIndicatorRect();
@@ -402,13 +394,12 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
             calcIndicatorRect();
         }
 
-        mIndicatorDrawable.setColor(mIndicatorColor);
-        mIndicatorDrawable.setBounds(paddingLeft + (int) mIndicatorMarginLeft + mIndicatorRect.left,
-                (int) mIndicatorMarginTop, (int) (paddingLeft + mIndicatorRect.right - mIndicatorMarginRight),
-                (int) (mIndicatorMarginTop + mIndicatorHeight));
-        mIndicatorDrawable.setCornerRadii(mRadiusArr);
-        mIndicatorDrawable.draw(canvas);
-
+        mIndicator.drawable.setColor(mIndicator.color);
+        mIndicator.drawable.setBounds(paddingLeft + (int) mIndicator.marginLeft + mIndicator.rect.left,
+                (int) mIndicator.marginTop, (int) (paddingLeft + mIndicator.rect.right - mIndicator.marginRight),
+                (int) (mIndicator.marginTop + mIndicator.height));
+        mIndicator.drawable.setCornerRadii(mRadiusArr);
+        mIndicator.drawable.draw(canvas);
     }
 
     //setter and getter
@@ -419,7 +410,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         if (mFragmentChangeManager != null) {
             mFragmentChangeManager.setFragments(currentTab);
         }
-        if (mIndicatorAnimEnable) {
+        if (mIndicator.animEnable) {
             calcOffset();
         } else {
             invalidate();
@@ -442,53 +433,53 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     }
 
     public void setIndicatorColor(int indicatorColor) {
-        this.mIndicatorColor = indicatorColor;
+        this.mIndicator.color = indicatorColor;
         invalidate();
     }
 
     public void setIndicatorHeight(float indicatorHeight) {
-        this.mIndicatorHeight = dp2px(indicatorHeight);
+        this.mIndicator.height = dp2px(indicatorHeight);
         invalidate();
     }
 
     public void setIndicatorCornerRadius(float indicatorCornerRadius) {
-        this.mIndicatorCornerRadius = dp2px(indicatorCornerRadius);
+        this.mIndicator.cornerRadius = dp2px(indicatorCornerRadius);
         invalidate();
     }
 
     public void setIndicatorMargin(float indicatorMarginLeft, float indicatorMarginTop,
                                    float indicatorMarginRight, float indicatorMarginBottom) {
-        this.mIndicatorMarginLeft = dp2px(indicatorMarginLeft);
-        this.mIndicatorMarginTop = dp2px(indicatorMarginTop);
-        this.mIndicatorMarginRight = dp2px(indicatorMarginRight);
-        this.mIndicatorMarginBottom = dp2px(indicatorMarginBottom);
+        this.mIndicator.marginLeft = dp2px(indicatorMarginLeft);
+        this.mIndicator.marginTop = dp2px(indicatorMarginTop);
+        this.mIndicator.marginRight = dp2px(indicatorMarginRight);
+        this.mIndicator.marginBottom = dp2px(indicatorMarginBottom);
         invalidate();
     }
 
     public void setIndicatorAnimDuration(long indicatorAnimDuration) {
-        this.mIndicatorAnimDuration = indicatorAnimDuration;
+        this.mIndicator.animDuration = indicatorAnimDuration;
     }
 
     public void setIndicatorAnimEnable(boolean indicatorAnimEnable) {
-        this.mIndicatorAnimEnable = indicatorAnimEnable;
+        this.mIndicator.animEnable = indicatorAnimEnable;
     }
 
     public void setIndicatorBounceEnable(boolean indicatorBounceEnable) {
-        this.mIndicatorBounceEnable = indicatorBounceEnable;
+        this.mIndicator.bounceEnable = indicatorBounceEnable;
     }
 
     public void setDividerColor(int dividerColor) {
-        this.mDividerColor = dividerColor;
+        this.mDivider.color = dividerColor;
         invalidate();
     }
 
     public void setDividerWidth(float dividerWidth) {
-        this.mDividerWidth = dp2px(dividerWidth);
+        this.mDivider.width = dp2px(dividerWidth);
         invalidate();
     }
 
     public void setDividerPadding(float dividerPadding) {
-        this.mDividerPadding = dp2px(dividerPadding);
+        this.mDivider.padding = dp2px(dividerPadding);
         invalidate();
     }
 
@@ -538,55 +529,55 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     }
 
     public int getIndicatorColor() {
-        return mIndicatorColor;
+        return mIndicator.color;
     }
 
     public float getIndicatorHeight() {
-        return mIndicatorHeight;
+        return mIndicator.height;
     }
 
     public float getIndicatorCornerRadius() {
-        return mIndicatorCornerRadius;
+        return mIndicator.cornerRadius;
     }
 
     public float getIndicatorMarginLeft() {
-        return mIndicatorMarginLeft;
+        return mIndicator.marginLeft;
     }
 
     public float getIndicatorMarginTop() {
-        return mIndicatorMarginTop;
+        return mIndicator.marginTop;
     }
 
     public float getIndicatorMarginRight() {
-        return mIndicatorMarginRight;
+        return mIndicator.marginRight;
     }
 
     public float getIndicatorMarginBottom() {
-        return mIndicatorMarginBottom;
+        return mIndicator.marginBottom;
     }
 
     public long getIndicatorAnimDuration() {
-        return mIndicatorAnimDuration;
+        return mIndicator.animDuration;
     }
 
     public boolean isIndicatorAnimEnable() {
-        return mIndicatorAnimEnable;
+        return mIndicator.animEnable;
     }
 
     public boolean isIndicatorBounceEnable() {
-        return mIndicatorBounceEnable;
+        return mIndicator.bounceEnable;
     }
 
     public int getDividerColor() {
-        return mDividerColor;
+        return mDivider.color;
     }
 
     public float getDividerWidth() {
-        return mDividerWidth;
+        return mDivider.width;
     }
 
     public float getDividerPadding() {
-        return mDividerPadding;
+        return mDivider.padding;
     }
 
     public float getTextsize() {
