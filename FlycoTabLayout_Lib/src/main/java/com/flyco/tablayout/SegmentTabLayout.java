@@ -96,9 +96,9 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     private static final int TEXT_BOLD_NONE = 0;
     private static final int TEXT_BOLD_WHEN_SELECT = 1;
     private static final int TEXT_BOLD_BOTH = 2;
-    private float mTextsize;
+    private float mTextSize;
     private int mTextSelectColor;
-    private int mTextUnselectColor;
+    private int mTextUnSelectColor;
     private int mTextBold;
     private boolean mTextAllCaps;
 
@@ -164,9 +164,9 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         mDivider.width = ta.getDimension(R.styleable.SegmentTabLayout_tl_divider_width, dp2px(1));
         mDivider.padding = ta.getDimension(R.styleable.SegmentTabLayout_tl_divider_padding, 0);
 
-        mTextsize = ta.getDimension(R.styleable.SegmentTabLayout_tl_textsize, sp2px(13f));
+        mTextSize = ta.getDimension(R.styleable.SegmentTabLayout_tl_textsize, sp2px(13f));
         mTextSelectColor = ta.getColor(R.styleable.SegmentTabLayout_tl_textSelectColor, Color.parseColor("#ffffff"));
-        mTextUnselectColor = ta.getColor(R.styleable.SegmentTabLayout_tl_textUnselectColor, mIndicator.color);
+        mTextUnSelectColor = ta.getColor(R.styleable.SegmentTabLayout_tl_textUnselectColor, mIndicator.color);
         mTextBold = ta.getInt(R.styleable.SegmentTabLayout_tl_textBold, TEXT_BOLD_NONE);
         mTextAllCaps = ta.getBoolean(R.styleable.SegmentTabLayout_tl_textAllCaps, false);
 
@@ -251,8 +251,8 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         for (int i = 0; i < mTabCount; i++) {
             TabView tabView = getTabView(i);
             tabView.setPadding((int) mTabPadding, 0, (int) mTabPadding, 0);
-            tabView.tvTitle.setTextColor(i == mCurrentTab ? mTextSelectColor : mTextUnselectColor);
-            tabView.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextsize);
+            tabView.tvTitle.setTextColor(i == mCurrentTab ? mTextSelectColor : mTextUnSelectColor);
+            tabView.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             // tv_tab_title.setPadding((int) mTabPadding, 0, (int) mTabPadding, 0);
             if (mTextAllCaps) {
                 tabView.tvTitle.setText(tabView.tvTitle.getText().toString().toUpperCase());
@@ -270,7 +270,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         for (int i = 0; i < mTabCount; ++i) {
             TextView tvTitle = getTitleView(i);
             final boolean isSelect = i == position;
-            tvTitle.setTextColor(isSelect ? mTextSelectColor : mTextUnselectColor);
+            tvTitle.setTextColor(isSelect ? mTextSelectColor : mTextUnSelectColor);
             if (mTextBold == TEXT_BOLD_WHEN_SELECT) {
                 tvTitle.getPaint().setFakeBoldText(isSelect);
             }
@@ -487,7 +487,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     }
 
     public void setTextsize(float textsize) {
-        this.mTextsize = sp2px(textsize);
+        this.mTextSize = sp2px(textsize);
         updateTabStyles();
     }
 
@@ -497,7 +497,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     }
 
     public void setTextUnselectColor(int textUnselectColor) {
-        this.mTextUnselectColor = textUnselectColor;
+        this.mTextUnSelectColor = textUnselectColor;
         updateTabStyles();
     }
 
@@ -584,7 +584,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     }
 
     public float getTextsize() {
-        return mTextsize;
+        return mTextSize;
     }
 
     public int getTextSelectColor() {
@@ -592,7 +592,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     }
 
     public int getTextUnselectColor() {
-        return mTextUnselectColor;
+        return mTextUnSelectColor;
     }
 
     public int getTextBold() {
@@ -676,13 +676,10 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
      * 2.控件高度不固定(WRAP_CONTENT):参照点为tab内容的右上角,此时高度已是红点的最高显示范围,所以这时bottomPadding其实就是topPadding
      */
     public void setMsgMargin(int position, float leftPadding, float bottomPadding) {
-        if (position >= mTabCount) {
-            position = mTabCount - 1;
-        }
         MsgView tipView = getMsgView(position);
         if (tipView != null) {
-            mTextPaint.setTextSize(mTextsize);
-            // float textWidth = mTextPaint.measureText(tabView.tvTitle.getText().toString());
+            mTextPaint.setTextSize(mTextSize);
+            float textWidth = mTextPaint.measureText(getTitleView(position).getText().toString());
             float textHeight = mTextPaint.descent() - mTextPaint.ascent();
             MarginLayoutParams lp = (MarginLayoutParams) tipView.getLayoutParams();
 
