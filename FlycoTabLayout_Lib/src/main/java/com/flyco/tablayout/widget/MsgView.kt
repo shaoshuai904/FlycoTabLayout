@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.widget.TextView
 import com.flyco.tablayout.R
+import com.flyco.tablayout.utils.DensityUtils
 import kotlin.math.max
 
 /**
@@ -55,7 +56,7 @@ class MsgView @JvmOverloads constructor(
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         if (isRadiusHalfHeight()) {
-            setCornerRadius(height / 2)
+            setCornerRadius(height / 2F)
         } else {
             setBgSelector()
         }
@@ -70,8 +71,8 @@ class MsgView @JvmOverloads constructor(
         return backgroundColor
     }
 
-    fun setCornerRadius(cornerRadius: Int) {
-        this.cornerRadius = dp2px(cornerRadius.toFloat())
+    fun setCornerRadius(cornerRadius: Float) {
+        this.cornerRadius = DensityUtils.dp2px(context, cornerRadius)
         setBgSelector()
     }
 
@@ -79,8 +80,8 @@ class MsgView @JvmOverloads constructor(
         return cornerRadius
     }
 
-    fun setStrokeWidth(strokeWidth: Int) {
-        this.strokeWidth = dp2px(strokeWidth.toFloat())
+    fun setStrokeWidth(strokeWidth: Float) {
+        this.strokeWidth = DensityUtils.dp2px(context, strokeWidth)
         setBgSelector()
     }
 
@@ -113,16 +114,6 @@ class MsgView @JvmOverloads constructor(
 
     fun isWidthHeightEqual(): Boolean {
         return isWidthHeightEqual
-    }
-
-    private fun dp2px(dp: Float): Int {
-        val scale = context.resources.displayMetrics.density
-        return (dp * scale + 0.5f).toInt()
-    }
-
-    private fun sp2px(sp: Float): Int {
-        val scale = this.context.resources.displayMetrics.scaledDensity
-        return (sp * scale + 0.5f).toInt()
     }
 
     private fun setDrawable(gd: GradientDrawable, color: Int, strokeColor: Int) {

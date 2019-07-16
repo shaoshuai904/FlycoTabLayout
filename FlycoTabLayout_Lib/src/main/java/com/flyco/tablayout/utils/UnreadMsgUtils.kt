@@ -19,7 +19,7 @@ object UnreadMsgUtils {
         val dm = msgView.resources.displayMetrics
         msgView.visibility = View.VISIBLE
         if (num <= 0) {//圆点,设置默认宽高
-            msgView.setStrokeWidth(0)
+            msgView.setStrokeWidth(0F)
             msgView.text = ""
 
             lp.width = (5 * dm.density).toInt()
@@ -48,7 +48,11 @@ object UnreadMsgUtils {
     }
 
     @JvmStatic
-    fun setSize(rtv: MsgView, size: Int) {
+    fun setDpSize(rtv: MsgView, size: Float) {
+        setSize(rtv, DensityUtils.dp2px(rtv.context, size))
+    }
+
+    private fun setSize(rtv: MsgView, size: Int) {
         val lp = rtv.layoutParams as RelativeLayout.LayoutParams
         lp.width = size
         lp.height = size

@@ -66,7 +66,7 @@ class CommonTabActivity : FragmentActivity() {
             showDot(2)
             val msgView2 = getMsgView(2)
             if (msgView2 != null) {
-                UnreadMsgUtils.setSize(msgView2, dp2px(7.5f))
+                UnreadMsgUtils.setDpSize(msgView2, 7.5f)
             }
 
             //设置未读消息背景
@@ -143,10 +143,5 @@ class CommonTabActivity : FragmentActivity() {
         override fun getItem(position: Int): Fragment {
             return mFragments[position]
         }
-    }
-
-    private fun dp2px(dp: Float): Int {
-        val scale = mContext.resources.displayMetrics.density
-        return (dp * scale + 0.5f).toInt()
     }
 }
