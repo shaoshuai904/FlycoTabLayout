@@ -30,8 +30,8 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    //---> support 3.0+
-//    compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    // ---> support 3.0+
+    // compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
 }
 repositories {
     mavenCentral()

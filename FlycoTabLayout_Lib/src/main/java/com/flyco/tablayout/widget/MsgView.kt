@@ -18,7 +18,7 @@ import kotlin.math.max
 class MsgView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : TextView(context, attrs, defStyleAttr) {
-    private val gd_background = GradientDrawable()
+    private val gdBackground = GradientDrawable()
     private var backgroundColor: Int = 0
     private var cornerRadius: Int = 0
     private var strokeWidth: Int = 0
@@ -60,7 +60,6 @@ class MsgView @JvmOverloads constructor(
             setBgSelector()
         }
     }
-
 
     override fun setBackgroundColor(backgroundColor: Int) {
         this.backgroundColor = backgroundColor
@@ -135,8 +134,8 @@ class MsgView @JvmOverloads constructor(
     private fun setBgSelector() {
         val bg = StateListDrawable()
 
-        setDrawable(gd_background, backgroundColor, strokeColor)
-        bg.addState(intArrayOf(-android.R.attr.state_pressed), gd_background)
+        setDrawable(gdBackground, backgroundColor, strokeColor)
+        bg.addState(intArrayOf(-android.R.attr.state_pressed), gdBackground)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {//16
             background = bg

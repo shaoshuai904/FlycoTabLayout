@@ -331,8 +331,6 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
         mLastP.left = lastTabView.getLeft();
         mLastP.right = lastTabView.getRight();
 
-//        Log.d("AAA", "mLastP--->" + mLastP.left + "&" + mLastP.right);
-//        Log.d("AAA", "mCurrentP--->" + mCurrentP.left + "&" + mCurrentP.right);
         if (mLastP.left == mCurrentP.left && mLastP.right == mCurrentP.right) {
             invalidate();
         } else {
